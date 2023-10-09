@@ -1,17 +1,14 @@
-const express=require('express');
+require('dotenv').config();
+const express = require('express');
 const session=require('express-session');
 const passport=require('passport');
 const GoogleStrategy=require('passport-google-oauth20').Strategy; //class name starts with caps
 const ejs=require('ejs');
 const path=require('path');
+const { REFUSED } = require('dns');
 
 
 const app=express();
-
-
-// 839183282321-hptgtm00mg7pg63k23c11f4087a1l5ir.apps.googleusercontent.com
-
-// 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
 
 app.set("view engine","ejs");
 
@@ -28,12 +25,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // connect application to google oauth
+// passport.use(new GoogleStrategy({
+//     clientID:"839183282321-4fl3b2hrlt5sbkm46dq2p6d3841j2lkk.apps.googleusercontent.com",
+//     clientSecret:"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",
+//     callbackURL:"http://localhost:8000/google/callback"
+
+// },function(accessToken,refereshToken,profile,cb){
+//     cb(null,profile)
+// }))
 passport.use(new GoogleStrategy({
-    clientID:"839183282321-hptgtm00mg7pg63k23c11f4087a1l5ir.apps.googleusercontent.com",
-    clientSecret:"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",
-    callbackURL:"http://localhost:8000/google/callback"
-},function(accessToken,refereshToken,profile,cb){
-    cb(null,profile)
+    clientID: process.env.clientID,
+    clientSecret: process.env.clientSecret,
+    callbackURL: "http://localhost:8000/google/callback"
+}, function (accessToken, refreshToken, profile, cb) {
+    cb(null, profile);
 }))
 
 passport.serializeUser(function(user,cb){
@@ -65,9 +70,10 @@ app.get("/dashboard",(req,res)=>{
     if(req.isAuthenticated())
         res.render(path.join(__dirname,"dashboard.ejs"),{user:req.user});
     else
-        res.render(path.join(__dirname,"login.ejs"));s
+        res.render(path.join(__dirname,"login.ejs"));
 })
 
 app.listen("8000",()=>{
+
     console.log("listing");
 })
