@@ -24,15 +24,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// connect application to google oauth
-// passport.use(new GoogleStrategy({
-//     clientID:"839183282321-4fl3b2hrlt5sbkm46dq2p6d3841j2lkk.apps.googleusercontent.com",
-//     clientSecret:"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",
-//     callbackURL:"http://localhost:8000/google/callback"
 
-// },function(accessToken,refereshToken,profile,cb){
-//     cb(null,profile)
-// }))
 passport.use(new GoogleStrategy({
     clientID: process.env.clientID,
     clientSecret: process.env.clientSecret,
