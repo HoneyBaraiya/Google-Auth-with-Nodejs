@@ -65,6 +65,18 @@ app.get("/dashboard",(req,res)=>{
         res.render(path.join(__dirname,"login.ejs"));
 })
 
+
+app.get("/logout", (req, res) => {
+    req.logout(function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.redirect("/login");
+      }
+    });
+  });
+
+
 app.listen("8000",()=>{
 
     console.log("listing");
